@@ -291,8 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label">Current Image</label>
-                                        <img src="../<?= htmlspecialchars($property['image']) ?>" 
-                                             alt="Property Image" class="property-image-preview mb-2">
+                                        <img src="../assets/images/properties/<?= htmlspecialchars($property['image']) ?>" alt="Property Image" class="property-image-preview mb-2">
                                         <input type="file" class="form-control" id="image" name="image" accept="image/*">
                                         <small class="text-muted">Leave empty to keep current image</small>
                                     </div>

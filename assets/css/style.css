@@ -256,8 +256,8 @@ body {
 
 /* Authentication Pages */
 .auth-container {
-    max-width: 800px;
-    margin: 2rem auto;
+    max-width: 500px;
+    margin: 6rem auto;
     padding: 0 1rem;
 }
 
