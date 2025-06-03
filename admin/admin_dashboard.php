@@ -121,7 +121,7 @@ $recent_inquiries = $conn->query($recent_inquiries_query);
                         <div class="property-list">
                             <?php while($property = $recent_properties->fetch_assoc()): ?>
                             <div class="property-item">
-                                 <img src="../<?= htmlspecialchars($property['image']) ?>" alt="Property Image" class="property-thumb">
+                                 <img src="../assets/images/properties/<?= htmlspecialchars($property['image']) ?>" alt="Property Image" class="property-thumb">
                                  <div class="property-info">
                                      <p class="property-title"><?= htmlspecialchars($property['title']) ?></p>
                                      <p class="property-location"><?= htmlspecialchars($property['location']) ?></p>

@@ -70,7 +70,7 @@ if (isset($_SESSION['user_id'])) {
                 
                 foreach ($featured_properties as $property) {
                     echo '<div class="property-card">';
-                    echo '<img src="' . htmlspecialchars($property['image']) . '" alt="' . htmlspecialchars($property['title']) . '">';
+                    echo '<img src="assets/images/properties/' . htmlspecialchars($property['image']) . '" alt="Property Image" class="property-thumb">';
                     echo '<div class="property-info">';
                     echo '<h3>' . htmlspecialchars($property['title']) . '</h3>';
                     echo '<p class="price">₱' . number_format($property['price']) . '</p>';

@@ -59,7 +59,7 @@ $total_pages = ceil($total / $per_page);
             <div class="col-md-9 col-lg-10 main-content">
                 <div class="properties-header">
                     <h2>Manage Properties</h2>
-                    <a href="../addproperty.php" class="btn btn-primary">
+                    <a href="addproperty.php" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Add New Property
                     </a>
                 </div>
@@ -97,9 +97,7 @@ $total_pages = ceil($total / $per_page);
                                     <?php while ($property = $properties->fetch_assoc()): ?>
                                         <tr>
                                             <td>
-                                                <img src="../<?= htmlspecialchars($property['image']) ?>" 
-                                                     alt="<?= htmlspecialchars($property['title']) ?>" 
-                                                     class="property-image">
+                                            <img src="../assets/images/properties/<?= htmlspecialchars($property['image']) ?>" alt="Property Image" class="property-image">
                                             </td>
                                             <td>
                                                 <div class="property-title"><?= htmlspecialchars($property['title']) ?></div>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start();    
 require_once '../includes/config.php';
 require_once '../includes/functions.php';
 
@@ -136,30 +136,36 @@ while ($row = $count_result->fetch_assoc()) {
             <div class="dashboard-grid">
                 <!-- Status Summary Cards -->
                 <div class="dashboard-card stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-envelope icon"></i>
-                        <h4>New Inquiries</h4>
+                    <div class="stat-padding">
+                        <div class="stat-header">
+                            <i class="fas fa-envelope icon"></i>
+                            <h4>New Inquiries</h4>
+                        </div>
+                        <p class="stat-value"><?= $status_counts['new'] ?></p>
+                        <p class="stat-change">Requires attention</p>
                     </div>
-                    <p class="stat-value"><?= $status_counts['new'] ?></p>
-                    <p class="stat-change">Requires attention</p>
                 </div>
 
                 <div class="dashboard-card stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-eye icon"></i>
-                        <h4>Read Inquiries</h4>
+                    <div class="stat-padding">
+                        <div class="stat-header">
+                            <i class="fas fa-eye icon"></i>
+                            <h4>Read Inquiries</h4>
+                        </div>
+                        <p class="stat-value"><?= $status_counts['read'] ?></p>
+                        <p class="stat-change">In progress</p>
                     </div>
-                    <p class="stat-value"><?= $status_counts['read'] ?></p>
-                    <p class="stat-change">In progress</p>
                 </div>
 
                 <div class="dashboard-card stat-card">
-                    <div class="stat-header">
-                        <i class="fas fa-reply icon"></i>
-                        <h4>Replied Inquiries</h4>
+                    <div class="stat-padding">
+                        <div class="stat-header">
+                            <i class="fas fa-reply icon"></i>
+                            <h4>Replied Inquiries</h4>
+                        </div>
+                        <p class="stat-value"><?= $status_counts['replied'] ?></p>
+                        <p class="stat-change">Completed</p>
                     </div>
-                    <p class="stat-value"><?= $status_counts['replied'] ?></p>
-                    <p class="stat-change">Completed</p>
                 </div>
 
                 <!-- Inquiries List -->

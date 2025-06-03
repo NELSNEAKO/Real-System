@@ -56,7 +56,7 @@ body {
 .sidebar-header .logo a {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--text-color); /* Darker logo color */
+    color: var(--admin-primary);
     text-decoration: none;
 }
 

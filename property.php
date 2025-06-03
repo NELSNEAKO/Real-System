@@ -85,13 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="property-detail">
         <div class="property-gallery">
             <div class="main-image">
-                <img src="<?php echo htmlspecialchars($property['image']); ?>" alt="<?php echo htmlspecialchars($property['title']); ?>">
+                <img src="assets/images/properties/<?php echo htmlspecialchars($property['image']); ?>" alt="<?php echo htmlspecialchars($property['title']); ?>">
             </div>
             <?php if (!empty($property_images)): ?>
                 <div class="thumbnail-grid">
                     <?php foreach ($property_images as $image): ?>
                         <div class="thumbnail">
-                            <img src="<?php echo htmlspecialchars($image['image_path']); ?>" alt="Property image">
+                            <img src="assets/images/properties/<?php echo htmlspecialchars($image['image_path']); ?>" alt="Property image">
                         </div>
                     <?php endforeach; ?>
                 </div>

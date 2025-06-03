@@ -98,7 +98,7 @@ $current_page = $result['current_page'];
                 <?php else: ?>
                     <?php foreach ($properties as $property): ?>
                         <div class="property-card">
-                            <img src="<?php echo htmlspecialchars($property['image']); ?>" 
+                            <img src="assets/images/properties/<?php echo htmlspecialchars($property['image']); ?>" 
                                  alt="<?php echo htmlspecialchars($property['title']); ?>"
                                  loading="lazy"
                                  width="400"

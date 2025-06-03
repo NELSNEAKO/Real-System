@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="index.php">Modern Real Estate</a>
             </div>
             <div class="nav-links">
-                <a href="admin_login.php">Admin</a>
+                <a href="admin/admin_login.php">Admin</a>
                 <a href="about.php">About</a>
                 <a href="contact.php">Contact</a>
             </div>

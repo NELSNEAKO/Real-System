@@ -70,25 +70,121 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .sidebar {
-            min-height: 100vh;
-            background: #343a40;
-            color: white;
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
         }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .sidebar a:hover {
-            background: #495057;
-        }
+
         .main-content {
-            padding: 20px;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin: 2rem;
         }
+
+        .card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
         .property-image-preview {
-            max-width: 300px;
-            max-height: 200px;
+            width: 100%;
+            height: 200px;
             object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-3 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .text-muted {
+            font-size: 0.85rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
@@ -96,38 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-3">
-                <h3 class="mb-4">Admin Panel</h3>
-                <nav>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_dashboard.php">
-                                <i class="fas fa-home"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="admin_properties.php">
-                                <i class="fas fa-building"></i> Properties
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_users.php">
-                                <i class="fas fa-users"></i> Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_inquiries.php">
-                                <i class="fas fa-envelope"></i> Inquiries
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_logout.php">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 main-content">

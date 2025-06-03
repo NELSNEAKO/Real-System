@@ -43,28 +43,14 @@ $total_pages = ceil($total_users / $users_per_page);
     <title>Manage Users - Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background: #343a40;
-            color: white;
-        }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background: #495057;
-        }
-        .main-content {
-            padding: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your main stylesheet -->
+    
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            
+        <?php include 'includes/sidebar.php'; ?>
+               
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 main-content">
