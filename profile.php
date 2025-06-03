@@ -24,24 +24,54 @@ if (!$user) {
 }
 
 // Get user's saved properties
-$sql = "SELECT p.* FROM properties p 
-        INNER JOIN favorites f ON p.id = f.property_id 
-        WHERE f.user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$saved_properties = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+try {
+    $sql = "SELECT p.* FROM properties p 
+            INNER JOIN favorites f ON p.id = f.property_id 
+            WHERE f.user_id = ? 
+            ORDER BY f.created_at DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $saved_properties = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+} catch (mysqli_sql_exception $e) {
+    // If favorites table doesn't exist, create it
+    if ($e->getCode() == 1146) { // Table doesn't exist error code
+        $create_table_sql = "CREATE TABLE IF NOT EXISTS `favorites` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `user_id` int(11) NOT NULL,
+            `property_id` int(11) NOT NULL,
+            `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `user_property` (`user_id`, `property_id`),
+            KEY `property_id` (`property_id`),
+            CONSTRAINT `favorites_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+            CONSTRAINT `favorites_ibfk_2` FOREIGN KEY (`property_id`) REFERENCES `properties` (`id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
+        
+        $conn->query($create_table_sql);
+        $saved_properties = [];
+    } else {
+        // For other database errors
+        error_log("Database error: " . $e->getMessage());
+        $saved_properties = [];
+    }
+}
 
 // Get user's inquiries
-$sql = "SELECT i.*, p.title as property_title, p.image as property_image 
-        FROM inquiries i 
-        INNER JOIN properties p ON i.property_id = p.id 
-        WHERE i.user_id = ? 
-        ORDER BY i.created_at DESC";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$inquiries = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+try {
+    $sql = "SELECT i.*, p.title as property_title, p.image as property_image 
+            FROM inquiries i 
+            INNER JOIN properties p ON i.property_id = p.id 
+            WHERE i.user_id = ? 
+            ORDER BY i.created_at DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $inquiries = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+} catch (mysqli_sql_exception $e) {
+    error_log("Database error: " . $e->getMessage());
+    $inquiries = [];
+}
 
 // Handle profile update
 $success = '';

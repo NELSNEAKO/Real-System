@@ -11,7 +11,7 @@ require_once 'includes/functions.php';
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
@@ -75,26 +75,7 @@ require_once 'includes/functions.php';
                 </div>
             </section>
 
-            <section class="about-section">
-                <h2>Our Team</h2>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <img src="assets/images/team/member1.jpg" alt="John Doe">
-                        <h3>John Doe</h3>
-                        <p>Founder & CEO</p>
-                    </div>
-                    <div class="team-member">
-                        <img src="assets/images/team/member2.jpg" alt="Jane Smith">
-                        <h3>Jane Smith</h3>
-                        <p>Head of Sales</p>
-                    </div>
-                    <div class="team-member">
-                        <img src="assets/images/team/member3.jpg" alt="Mike Johnson">
-                        <h3>Mike Johnson</h3>
-                        <p>Property Manager</p>
-                    </div>
-                </div>
-            </section>
+            
         </div>
     </main>
 

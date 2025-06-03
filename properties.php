@@ -7,9 +7,14 @@ $location = isset($_GET['location']) ? sanitizeInput($_GET['location']) : '';
 $type = isset($_GET['type']) ? sanitizeInput($_GET['type']) : '';
 $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : '';
 $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : '';
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$per_page = 12;
 
 // Get properties based on filters
-$properties = searchProperties($conn, $location, $type, $min_price, $max_price);
+$result = searchProperties($conn, $location, $type, $min_price, $max_price, $page, $per_page);
+$properties = $result['properties'];
+$total_pages = $result['total_pages'];
+$current_page = $result['current_page'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +25,7 @@ $properties = searchProperties($conn, $location, $type, $min_price, $max_price);
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 </head>
 <body>
     <header class="header">
@@ -92,7 +97,12 @@ $properties = searchProperties($conn, $location, $type, $min_price, $max_price);
                 <?php else: ?>
                     <?php foreach ($properties as $property): ?>
                         <div class="property-card">
-                            <img src="<?php echo htmlspecialchars($property['image']); ?>" alt="<?php echo htmlspecialchars($property['title']); ?>">
+                            <img src="<?php echo htmlspecialchars($property['image']); ?>" 
+                                 alt="<?php echo htmlspecialchars($property['title']); ?>"
+                                 loading="lazy"
+                                 width="400"
+                                 height="300"
+                                 decoding="async">
                             <div class="property-info">
                                 <h3><?php echo htmlspecialchars($property['title']); ?></h3>
                                 <p class="price">₱<?php echo number_format($property['price']); ?></p>
@@ -108,6 +118,25 @@ $properties = searchProperties($conn, $location, $type, $min_price, $max_price);
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
+
+            <?php if ($total_pages > 1): ?>
+            <div class="pagination">
+                <?php if ($current_page > 1): ?>
+                    <a href="?page=<?php echo $current_page - 1; ?>&location=<?php echo urlencode($location); ?>&type=<?php echo urlencode($type); ?>&min_price=<?php echo $min_price; ?>&max_price=<?php echo $max_price; ?>" class="page-link">&laquo; Previous</a>
+                <?php endif; ?>
+                
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?page=<?php echo $i; ?>&location=<?php echo urlencode($location); ?>&type=<?php echo urlencode($type); ?>&min_price=<?php echo $min_price; ?>&max_price=<?php echo $max_price; ?>" 
+                       class="page-link <?php echo $i === $current_page ? 'active' : ''; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
+                
+                <?php if ($current_page < $total_pages): ?>
+                    <a href="?page=<?php echo $current_page + 1; ?>&location=<?php echo urlencode($location); ?>&type=<?php echo urlencode($type); ?>&min_price=<?php echo $min_price; ?>&max_price=<?php echo $max_price; ?>" class="page-link">Next &raquo;</a>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
         </div>
     </main>
 
