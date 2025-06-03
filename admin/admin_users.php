@@ -64,39 +64,7 @@ $total_pages = ceil($total_users / $users_per_page);
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-3">
-                <h3 class="mb-4">Admin Panel</h3>
-                <nav>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_dashboard.php">
-                                <i class="fas fa-home"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_properties.php">
-                                <i class="fas fa-building"></i> Properties
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="admin_users.php">
-                                <i class="fas fa-users"></i> Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_inquiries.php">
-                                <i class="fas fa-envelope"></i> Inquiries
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_logout.php">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 main-content">
@@ -119,7 +87,7 @@ $total_pages = ceil($total_users / $users_per_page);
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
+                                        <th>Username</th>
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Joined Date</th>
@@ -130,7 +98,7 @@ $total_pages = ceil($total_users / $users_per_page);
                                     <?php foreach ($users as $user): ?>
                                         <tr>
                                             <td><?= $user['id'] ?></td>
-                                            <td><?= htmlspecialchars($user['name']) ?></td>
+                                            <td><?= htmlspecialchars($user['username']) ?></td>
                                             <td><?= htmlspecialchars($user['email']) ?></td>
                                             <td><?= htmlspecialchars($user['phone']) ?></td>
                                             <td><?= date('M d, Y', strtotime($user['created_at'])) ?></td>
@@ -159,7 +127,7 @@ $total_pages = ceil($total_users / $users_per_page);
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p><strong>Name:</strong> <?= htmlspecialchars($user['name']) ?></p>
+                                                        <p><strong>Username:</strong> <?= htmlspecialchars($user['username']) ?></p>
                                                         <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
                                                         <p><strong>Phone:</strong> <?= htmlspecialchars($user['phone']) ?></p>
                                                         <p><strong>Joined Date:</strong> <?= date('M d, Y', strtotime($user['created_at'])) ?></p>

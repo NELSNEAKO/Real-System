@@ -44,69 +44,20 @@ $total_pages = ceil($total / $per_page);
     <title>Manage Properties - Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background: #343a40;
-            color: white;
-        }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background: #495057;
-        }
-        .main-content {
-            padding: 20px;
-        }
-        .property-image {
-            width: 100px;
-            height: 60px;
-            object-fit: cover;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Fixed path to styles.css -->
+    
+    
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-3">
-                <h3 class="mb-4">Admin Panel</h3>
-                <nav>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_dashboard.php">
-                                <i class="fas fa-home"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="admin_properties.php">
-                                <i class="fas fa-building"></i> Properties
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_users.php">
-                                <i class="fas fa-users"></i> Users
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_inquiries.php">
-                                <i class="fas fa-envelope"></i> Inquiries
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin_logout.php">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <?php include 'includes/sidebar.php'; ?>
+            
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="properties-header">
                     <h2>Manage Properties</h2>
                     <a href="../addproperty.php" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Add New Property
@@ -114,17 +65,23 @@ $total_pages = ceil($total / $per_page);
                 </div>
 
                 <?php if (isset($success_message)): ?>
-                    <div class="alert alert-success"><?= $success_message ?></div>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <?= $success_message ?>
+                    </div>
                 <?php endif; ?>
 
                 <?php if (isset($error_message)): ?>
-                    <div class="alert alert-danger"><?= $error_message ?></div>
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <?= $error_message ?>
+                    </div>
                 <?php endif; ?>
 
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Image</th>
@@ -144,27 +101,38 @@ $total_pages = ceil($total / $per_page);
                                                      alt="<?= htmlspecialchars($property['title']) ?>" 
                                                      class="property-image">
                                             </td>
-                                            <td><?= htmlspecialchars($property['title']) ?></td>
-                                            <td>₱<?= number_format($property['price']) ?></td>
-                                            <td><?= htmlspecialchars($property['location']) ?></td>
-                                            <td><?= htmlspecialchars($property['type']) ?></td>
+                                            <td>
+                                                <div class="property-title"><?= htmlspecialchars($property['title']) ?></div>
+                                                <div class="property-location"><?= htmlspecialchars($property['location']) ?></div>
+                                            </td>
+                                            <td>
+                                                <div class="property-price">₱<?= number_format($property['price']) ?></div>
+                                            </td>
+                                            <td>
+                                                <div class="property-location"><?= htmlspecialchars($property['location']) ?></div>
+                                            </td>
+                                            <td>
+                                                <div class="property-type"><?= htmlspecialchars($property['type']) ?></div>
+                                            </td>
                                             <td>
                                                 <span class="badge bg-<?= $property['status'] === 'available' ? 'success' : 'danger' ?>">
                                                     <?= htmlspecialchars($property['status']) ?>
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="edit_property.php?id=<?= $property['id'] ?>" 
-                                                   class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <form method="POST" class="d-inline" 
-                                                      onsubmit="return confirm('Are you sure you want to delete this property?');">
-                                                    <input type="hidden" name="property_id" value="<?= $property['id'] ?>">
-                                                    <button type="submit" name="delete_property" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
+                                                <div class="action-buttons">
+                                                    <a href="edit_property.php?id=<?= $property['id'] ?>" 
+                                                       class="btn btn-sm btn-primary" title="Edit Property">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form method="POST" class="d-inline" 
+                                                          onsubmit="return confirm('Are you sure you want to delete this property?');">
+                                                        <input type="hidden" name="property_id" value="<?= $property['id'] ?>">
+                                                        <button type="submit" name="delete_property" class="btn btn-sm btn-danger" title="Delete Property">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>
@@ -174,7 +142,7 @@ $total_pages = ceil($total / $per_page);
 
                         <!-- Pagination -->
                         <?php if ($total_pages > 1): ?>
-                            <nav aria-label="Page navigation" class="mt-4">
+                            <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">
                                     <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                                         <li class="page-item <?= $i === $page ? 'active' : '' ?>">

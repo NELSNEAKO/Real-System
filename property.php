@@ -2,12 +2,15 @@
 session_start();
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
-    
 
-if (!isset($_GET['id'])) {
-    header('Location: properties.php');
+
+// Check if admin is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
     exit;
 }
+        
+
 
 $property_id = (int)$_GET['id'];
 $property = getPropertyById($conn, $property_id);
