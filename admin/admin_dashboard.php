@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'includes/config.php';
+require_once '../includes/config.php';
 
 // Check if admin is logged in
 if (!isset($_SESSION['admin_id'])) {
@@ -160,7 +160,7 @@ $recent_inquiries = $conn->query($recent_inquiries_query);
                                             <?php while($property = $recent_properties->fetch_assoc()): ?>
                                             <tr>
                                                 <td><?= htmlspecialchars($property['title']) ?></td>
-                                                <td>$<?= number_format($property['price'], 2) ?></td>
+                                                <td>₱<?= number_format($property['price'], 2) ?></td>
                                                 <td><?= htmlspecialchars($property['type']) ?></td>
                                                 <td><?= htmlspecialchars($property['status']) ?></td>
                                             </tr>

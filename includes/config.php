@@ -1,26 +1,20 @@
+
 <?php
-// Database configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'modern_estate');
+$servername = "127.0.0.1";
+$username = "root";
+$password = "";
+$database = "modern_estate";
 
-// Create database connection
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-// Check connection
+$conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(["error" => "Connection failed."]));
 }
 
-// Set charset to utf8mb4
-$conn->set_charset("utf8mb4");
-
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// Simple debug function
+function debug($message) {
+    echo "<div style='background-color: #e8f5e9; padding: 10px; margin: 10px; border: 1px solid #c8e6c9; border-radius: 4px;'>";
+    echo $message;
+    echo "</div>";
 }
 
-// Error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1); 
+?>

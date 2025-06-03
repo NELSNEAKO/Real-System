@@ -3,7 +3,7 @@ session_start();
 if (isset($_SESSION['user_id'])) {
     header('Location: properties.php');
     exit;
-}
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,7 @@ if (isset($_SESSION['user_id'])) {
                 <a href="index.php">Modern Real Estate</a>
             </div>
             <div class="nav-links">
-                <a href="admin_login.php">Admin</a>
+                <a href="admin/admin_login.php">Admin</a>
                 <a href="about.php">About</a>
                 <a href="contact.php">Contact</a>
                 <?php if (isset($_SESSION['user_id'])): ?>

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once 'includes/config.php';
-require_once 'includes/functions.php';
+require_once '../includes/config.php';
+require_once '../includes/functions.php';
 
 // Check if admin is logged in
 if (!isset($_SESSION['admin_id'])) {
@@ -9,31 +9,35 @@ if (!isset($_SESSION['admin_id'])) {
     exit;
 }
 
-// Handle property deletion
-if (isset($_POST['delete_property'])) {
-    $property_id = (int)$_POST['property_id'];
-    if (deleteProperty($conn, $property_id)) {
-        $success_message = "Property deleted successfully!";
+// Handle inquiry deletion
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_inquiry'])) {
+    $inquiry_id = (int)$_POST['inquiry_id'];
+    if (deleteInquiry($conn, $inquiry_id)) {
+        $success_message = "Inquiry deleted successfully!";
     } else {
-        $error_message = "Failed to delete property.";
+        $error_message = "Failed to delete inquiry. Please try again.";
     }
 }
 
-// Get all properties with pagination
+// Get all inquiries with pagination
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$per_page = 10;
-$offset = ($page - 1) * $per_page;
+$inquiries_per_page = 10;
+$offset = ($page - 1) * $inquiries_per_page;
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM properties ORDER BY created_at DESC LIMIT ? OFFSET ?";
+$sql = "SELECT i.*, p.title as property_title, u.name as user_name 
+        FROM inquiries i 
+        LEFT JOIN properties p ON i.property_id = p.id 
+        LEFT JOIN users u ON i.user_id = u.id 
+        ORDER BY i.created_at DESC 
+        LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $per_page, $offset);
+$stmt->bind_param("ii", $inquiries_per_page, $offset);
 $stmt->execute();
-$properties = $stmt->get_result();
+$inquiries = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// Get total count for pagination
-$total_result = $conn->query("SELECT FOUND_ROWS()");
-$total = $total_result->fetch_row()[0];
-$total_pages = ceil($total / $per_page);
+// Get total inquiries count for pagination
+$total_inquiries = $conn->query("SELECT COUNT(*) as count FROM inquiries")->fetch_assoc()['count'];
+$total_pages = ceil($total_inquiries / $inquiries_per_page);
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +45,7 @@ $total_pages = ceil($total / $per_page);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Properties - Admin Panel</title>
+    <title>Manage Inquiries - Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -60,11 +64,6 @@ $total_pages = ceil($total / $per_page);
         .main-content {
             padding: 20px;
         }
-        .property-image {
-            width: 100px;
-            height: 60px;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body>
@@ -81,7 +80,7 @@ $total_pages = ceil($total / $per_page);
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="admin_properties.php">
+                            <a class="nav-link" href="admin_properties.php">
                                 <i class="fas fa-building"></i> Properties
                             </a>
                         </li>
@@ -91,7 +90,7 @@ $total_pages = ceil($total / $per_page);
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin_inquiries.php">
+                            <a class="nav-link active" href="admin_inquiries.php">
                                 <i class="fas fa-envelope"></i> Inquiries
                             </a>
                         </li>
@@ -107,10 +106,7 @@ $total_pages = ceil($total / $per_page);
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10 main-content">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Manage Properties</h2>
-                    <a href="addproperty.php" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add New Property
-                    </a>
+                    <h2>Manage Inquiries</h2>
                 </div>
 
                 <?php if (isset($success_message)): ?>
@@ -127,47 +123,57 @@ $total_pages = ceil($total / $per_page);
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Image</th>
-                                        <th>Title</th>
-                                        <th>Price</th>
-                                        <th>Location</th>
-                                        <th>Type</th>
-                                        <th>Status</th>
+                                        <th>ID</th>
+                                        <th>User</th>
+                                        <th>Property</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php while ($property = $properties->fetch_assoc()): ?>
+                                    <?php foreach ($inquiries as $inquiry): ?>
                                         <tr>
+                                            <td><?= $inquiry['id'] ?></td>
+                                            <td><?= htmlspecialchars($inquiry['user_name']) ?></td>
+                                            <td><?= htmlspecialchars($inquiry['property_title']) ?></td>
+                                            <td><?= htmlspecialchars(substr($inquiry['message'], 0, 50)) ?>...</td>
+                                            <td><?= date('M d, Y', strtotime($inquiry['created_at'])) ?></td>
                                             <td>
-                                                <img src="<?= htmlspecialchars($property['image']) ?>" 
-                                                     alt="<?= htmlspecialchars($property['title']) ?>" 
-                                                     class="property-image">
-                                            </td>
-                                            <td><?= htmlspecialchars($property['title']) ?></td>
-                                            <td>₱<?= number_format($property['price']) ?></td>
-                                            <td><?= htmlspecialchars($property['location']) ?></td>
-                                            <td><?= htmlspecialchars($property['type']) ?></td>
-                                            <td>
-                                                <span class="badge bg-<?= $property['status'] === 'available' ? 'success' : 'danger' ?>">
-                                                    <?= htmlspecialchars($property['status']) ?>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a href="edit_property.php?id=<?= $property['id'] ?>" 
-                                                   class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
+                                                <button type="button" class="btn btn-sm btn-info" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#viewInquiryModal<?= $inquiry['id'] ?>">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
                                                 <form method="POST" class="d-inline" 
-                                                      onsubmit="return confirm('Are you sure you want to delete this property?');">
-                                                    <input type="hidden" name="property_id" value="<?= $property['id'] ?>">
-                                                    <button type="submit" name="delete_property" class="btn btn-sm btn-danger">
+                                                      onsubmit="return confirm('Are you sure you want to delete this inquiry?');">
+                                                    <input type="hidden" name="inquiry_id" value="<?= $inquiry['id'] ?>">
+                                                    <button type="submit" name="delete_inquiry" class="btn btn-sm btn-danger">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
                                             </td>
                                         </tr>
-                                    <?php endwhile; ?>
+
+                                        <!-- View Inquiry Modal -->
+                                        <div class="modal fade" id="viewInquiryModal<?= $inquiry['id'] ?>" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Inquiry Details</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>User:</strong> <?= htmlspecialchars($inquiry['user_name']) ?></p>
+                                                        <p><strong>Property:</strong> <?= htmlspecialchars($inquiry['property_title']) ?></p>
+                                                        <p><strong>Message:</strong></p>
+                                                        <p><?= nl2br(htmlspecialchars($inquiry['message'])) ?></p>
+                                                        <p><strong>Date:</strong> <?= date('M d, Y H:i', strtotime($inquiry['created_at'])) ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>

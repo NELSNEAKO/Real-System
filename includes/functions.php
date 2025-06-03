@@ -154,7 +154,7 @@ function updateProperty($conn, $id, $data) {
             bathrooms = ?,
             area = ?,
             image = ?,
-            featured = ?
+            status = ?
             WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
@@ -168,7 +168,7 @@ function updateProperty($conn, $id, $data) {
         $data['bathrooms'],
         $data['area'],
         $data['image'],
-        $data['featured'],
+        $data['status'],
         $id
     );
     
