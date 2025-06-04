@@ -2,9 +2,9 @@
 require_once 'includes/config.php';
 
 // Admin account details
-$username = 'admin123';
-$email = 'admin123@gmail.com';
-$password = 'admin123';
+$username = 'admin';
+$email = 'admin@gmail.com';
+$password = 'admin';
 $full_name = 'Admin User';
 $phone = '09123456789';
 $role = 'admin';

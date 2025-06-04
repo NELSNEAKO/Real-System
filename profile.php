@@ -59,7 +59,7 @@ try {
 
 // Get user's inquiries
 try {
-    $sql = "SELECT i.*, p.title as property_title, p.image as property_image 
+    $sql = "SELECT i.*, p.title as property_title, p.image 
             FROM inquiries i 
             INNER JOIN properties p ON i.property_id = p.id 
             WHERE i.user_id = ? 
@@ -211,26 +211,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </form>
                 </section>
 
-                <section class="profile-section">
-                    <h2>Saved Properties</h2>
-                    <?php if (empty($saved_properties)): ?>
-                        <p class="no-items">You haven't saved any properties yet.</p>
-                    <?php else: ?>
-                        <div class="saved-properties-grid">
-                            <?php foreach ($saved_properties as $property): ?>
-                                <div class="property-card">
-                                    <img src="<?php echo htmlspecialchars($property['image']); ?>" alt="<?php echo htmlspecialchars($property['title']); ?>">
-                                    <div class="property-info">
-                                        <h3><?php echo htmlspecialchars($property['title']); ?></h3>
-                                        <p class="price">₱<?php echo number_format($property['price']); ?></p>
-                                        <p class="location"><?php echo htmlspecialchars($property['location']); ?></p>
-                                        <a href="property.php?id=<?php echo $property['id']; ?>" class="btn-view">View Details</a>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-                </section>
 
                 <section class="profile-section">
                     <h2>My Inquiries</h2>
@@ -241,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php foreach ($inquiries as $inquiry): ?>
                                 <div class="inquiry-card">
                                     <div class="inquiry-property">
-                                        <img src="<?php echo htmlspecialchars($inquiry['property_image']); ?>" alt="<?php echo htmlspecialchars($inquiry['property_title']); ?>">
+                                    <img src="assets/images/properties/<?php echo htmlspecialchars($inquiry['image']); ?>" alt="Property Image">
                                         <div class="inquiry-property-info">
                                             <h3><?php echo htmlspecialchars($inquiry['property_title']); ?></h3>
                                             <p class="inquiry-date"><?php echo date('F j, Y', strtotime($inquiry['created_at'])); ?></p>

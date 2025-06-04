@@ -176,11 +176,68 @@ function updateProperty($conn, $id, $data) {
 }
 
 function deleteProperty($conn, $id) {
-    $sql = "DELETE FROM properties WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    // Start transaction
+    $conn->begin_transaction();
     
-    return $stmt->execute();
+    try {
+        // Get property details to find images
+        $sql = "SELECT p.image, GROUP_CONCAT(pi.image_path) as additional_images 
+                FROM properties p 
+                LEFT JOIN property_images pi ON p.id = pi.property_id 
+                WHERE p.id = ? 
+                GROUP BY p.id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $property = $result->fetch_assoc();
+        
+        // Delete images from filesystem
+        if ($property) {
+            // Delete main property image
+            if (!empty($property['image']) && file_exists($property['image'])) {
+                unlink($property['image']);
+                // Also try to delete WebP version if it exists
+                $webp_path = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $property['image']);
+                if (file_exists($webp_path)) {
+                    unlink($webp_path);
+                }
+            }
+            
+            // Delete additional images
+            if (!empty($property['additional_images'])) {
+                $additional_images = explode(',', $property['additional_images']);
+                foreach ($additional_images as $image_path) {
+                    if (file_exists($image_path)) {
+                        unlink($image_path);
+                        // Also try to delete WebP version if it exists
+                        $webp_path = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $image_path);
+                        if (file_exists($webp_path)) {
+                            unlink($webp_path);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Delete from property_images table
+        $sql = "DELETE FROM property_images WHERE property_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        // Delete from properties table
+        $sql = "DELETE FROM properties WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        $conn->commit();
+        return true;
+    } catch (Exception $e) {
+        $conn->rollback();
+        return false;
+    }
 }
 
 function sanitizeInput($data) {
@@ -422,4 +479,24 @@ function serveImage($image_path) {
     
     readfile($image_path);
     exit;
+}
+
+function deleteUser($conn, $user_id) {
+    // First check if user exists
+    $check_sql = "SELECT id FROM users WHERE id = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("i", $user_id);
+    $check_stmt->execute();
+    $result = $check_stmt->get_result();
+    
+    if ($result->num_rows === 0) {
+        return false; // User doesn't exist
+    }
+    
+    // Delete the user
+    $sql = "DELETE FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    
+    return $stmt->execute();
 } 

@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once 'includes/config.php';
+require_once 'includes/functions.php';
 if (isset($_SESSION['user_id'])) {
     header('Location: properties.php');
     exit;
@@ -25,7 +27,6 @@ if (isset($_SESSION['user_id'])) {
             <div class="nav-links">
                 <a href="admin/admin_login.php">Admin</a>
                 <a href="about.php">About</a>
-                <a href="contact.php">Contact</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <a href="addproperty.php">Add Property</a>
@@ -44,7 +45,7 @@ if (isset($_SESSION['user_id'])) {
             <div class="hero-content">
                 <h1>Find Your Perfect Home</h1>
                 <p>Discover the best properties in your desired location</p>
-                <div class="search-container">
+                <!-- <div class="search-container">
                     <form action="search.php" method="GET" class="search-form">
                         <input type="text" name="location" placeholder="Enter location...">
                         <select name="type">
@@ -55,7 +56,7 @@ if (isset($_SESSION['user_id'])) {
                         </select>
                         <button type="submit" class="btn-search">Search</button>
                     </form>
-                </div>
+                </div> -->
             </div>
         </section>
 
@@ -63,8 +64,6 @@ if (isset($_SESSION['user_id'])) {
             <h2>Featured Properties</h2>
             <div class="property-grid">
                 <?php
-                require_once 'includes/config.php';
-                require_once 'includes/functions.php';
                 
                 $featured_properties = getFeaturedProperties($conn, 6);
                 
@@ -75,7 +74,11 @@ if (isset($_SESSION['user_id'])) {
                     echo '<h3>' . htmlspecialchars($property['title']) . '</h3>';
                     echo '<p class="price">₱' . number_format($property['price']) . '</p>';
                     echo '<p class="location">' . htmlspecialchars($property['location']) . '</p>';
-                    echo '<a href="property.php?id=' . $property['id'] . '" class="btn-view">View Details</a>';
+                    if (isset($_SESSION['user_id'])) {
+                        echo '<a href="property.php?id=' . $property['id'] . '" class="btn-view">View Details</a>';
+                    } else {
+                        echo '<a href="login.php" class="btn-view">View Details</a>';
+                    }
                     echo '</div>';
                     echo '</div>';
                 }

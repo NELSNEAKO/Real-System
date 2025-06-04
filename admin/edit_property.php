@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'price' => (float)$_POST['price'],
         'location' => sanitizeInput($_POST['location']),
         'type' => sanitizeInput($_POST['type']),
-        'bedrooms' => (int)$_POST['bedrooms'],
+        'bedrooms' => (int)$_POST['bedrooms'],  
         'bathrooms' => (int)$_POST['bathrooms'],
         'area' => (float)$_POST['area'],
         'status' => sanitizeInput($_POST['status']),

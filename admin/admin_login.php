@@ -53,9 +53,11 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Modern Estate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
             height: 100vh;
             display: flex;
             align-items: center;
@@ -132,9 +134,9 @@ $conn->close();
             <div class="mb-4 password-container">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
-                <button type="button" class="password-toggle" onclick="togglePassword()">
+                <!-- <button type="button" class="password-toggle" onclick="togglePassword()">
                     <i class="fas fa-eye"></i>
-                </button>
+                </button> -->
             </div>
             <button type="submit" class="btn btn-primary btn-login">Login</button>
         </form>
@@ -142,7 +144,7 @@ $conn->close();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <script>
+    <!-- <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -152,6 +154,6 @@ $conn->close();
             icon.classList.toggle('fa-eye');
             icon.classList.toggle('fa-eye-slash');
         }
-    </script>
+    </script> -->
 </body>
 </html>

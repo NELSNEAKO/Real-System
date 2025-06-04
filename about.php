@@ -22,7 +22,6 @@ require_once 'includes/functions.php';
             <div class="nav-links">
                 <a href="properties.php">Properties</a>
                 <a href="about.php" class="active">About</a>
-                <a href="contact.php">Contact</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <a href="addproperty.php">Add Property</a>
@@ -89,7 +88,6 @@ require_once 'includes/functions.php';
                 <h4>Quick Links</h4>
                 <a href="properties.php">Properties</a>
                 <a href="about.php">About Us</a>
-                <a href="contact.php">Contact</a>
             </div>
             <div class="footer-section">
                 <h4>Contact Us</h4>

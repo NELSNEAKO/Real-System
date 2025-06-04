@@ -71,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="nav-links">
                 <a href="properties.php">Properties</a>
                 <a href="about.php">About</a>
-                <a href="contact.php">Contact</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="profile.php">Profile</a>
                     <a href="logout.php" class="btn-login">Logout</a>
@@ -174,7 +173,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="footer-section">
                 <h4>Quick Links</h4>
                 <a href="properties.php">Properties</a>
-                <a href="about.php">About Us</a>
                 <a href="contact.php">Contact</a>
             </div>
             <div class="footer-section">
